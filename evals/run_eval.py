@@ -19,7 +19,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
-
+  
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 sys.path.insert(0, str(ROOT))
@@ -28,7 +28,7 @@ from app.llm import chat_completion, clean_reply   # noqa: E402
 
 CAIRO = ZoneInfo("Africa/Cairo")
 PUNCTUATION = re.compile(r"[.,،!;:]")  # the persona forbids these
-
+   
 
 def run_case(case: dict) -> dict:
     now = datetime.fromisoformat(case["now"]).replace(tzinfo=CAIRO) if case.get("now") else None
@@ -43,7 +43,7 @@ def run_case(case: dict) -> dict:
     return {"action": action, "reply": out["reply"], "problems": problems,
              "style_slip": clean_reply(out["reply"]) != out["reply"].strip()}
 
-
+   
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", type=int, default=1)
