@@ -23,13 +23,13 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 sys.path.insert(0, str(ROOT))
-
+  
 from app.llm import chat_completion, clean_reply   # noqa: E402
-
+  
 CAIRO = ZoneInfo("Africa/Cairo")
 PUNCTUATION = re.compile(r"[.,،!;:]")  # the persona forbids these
    
-
+   
 def run_case(case: dict) -> dict:
     now = datetime.fromisoformat(case["now"]).replace(tzinfo=CAIRO) if case.get("now") else None
     out = chat_completion(case["message"], [], "text", None, now=now)
@@ -67,7 +67,7 @@ def main() -> int:
             failures.append({"id": case["id"], "expected": case["expect"], "problems": problems,
                              "got": runs[0]["action"], "reply": runs[0]["reply"]})
         print(f"{'PASS' if passed else 'FAIL'}  {case['id']:<10} expected={case['expect']:<5} got={runs[0]['action']}")
-
+  
     n = len(cases)
     print(f"\n{totals['passed']}/{n} passed ({100 * totals['passed'] / n:.0f}%)  runs/case={args.runs}")
     print(f"unsafe sends (should have been held): {totals['unsafe_send']}")
