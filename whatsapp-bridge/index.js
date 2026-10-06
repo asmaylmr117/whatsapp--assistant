@@ -1,7 +1,7 @@
 // Thin WhatsApp connection layer.
 // All "thinking" (RAG, LLM, STT, TTS, vision) happens in the Python backend.
 // This file only: receives messages, forwards them, sends back the reply.
-
+  
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const axios = require("axios");
@@ -17,7 +17,7 @@ require("dotenv").config({ path: path.resolve(__dirname, "..", ".env") });
 // PHASE 2: flip to false once main.py is running, to route through the
 // real agent instead.
 const ECHO_ONLY = false;
-
+   
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8000/webhook";
 const ALLOW_GROUPS = (process.env.ALLOW_GROUPS || "false").toLowerCase() === "true";
 const ALLOWED_CONTACTS = (process.env.ALLOWED_CONTACTS || "")
@@ -46,7 +46,7 @@ async function checkAllowed(msg) {
   if (ALLOWED_CONTACTS.length === 0) return { allowed: true, number }; // open: tighten before going live
   return { allowed: ALLOWED_CONTACTS.includes(number), number };
 }
-
+   
 const puppeteerConfig = {
   headless: true,
   args: [
@@ -81,7 +81,7 @@ client.on("ready", () => {
   console.log(`WhatsApp bridge is ready. ECHO_ONLY = ${ECHO_ONLY}`);
   startBridgeApi(client);
 });
-
+   
 client.on("message", async (msg) => {
   try {
     if (msg.fromMe) {
@@ -123,7 +123,7 @@ client.on("message", async (msg) => {
           // image with a caption: fall through and answer the text only
         }
       }
-
+  
       const { data } = await axios.post(BACKEND_URL, payload, {
         timeout: 180000,
         headers: { "x-bridge-token": process.env.BRIDGE_API_TOKEN || "" },
